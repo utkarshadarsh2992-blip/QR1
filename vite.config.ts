@@ -166,49 +166,66 @@ function authPopupPlugin(): Plugin {
   };
 }
 
-export default defineConfig(({ command, isPreview }) => ({
-  server: {
-    host: "0.0.0.0",
-    port: 8080,
-    strictPort: true,
-  },
+export default defineConfig(({ command, isPreview }) => {
+  const isCapacitorBuild =
+    process.env.CAPACITOR_BUILD === "true";
 
-  preview: {
-    host: "127.0.0.1",
-    port: 8081,
-    strictPort: true,
-  },
+  return {
+    server: {
+      host: "0.0.0.0",
+      port: 8080,
+      strictPort: true,
+    },
 
-  resolve: {
-    tsconfigPaths: true,
-  },
+    preview: {
+      host: "127.0.0.1",
+      port: 8081,
+      strictPort: true,
+    },
 
-  plugins: [
-    pgliteBootstrapPlugin(),
+    resolve: {
+      tsconfigPaths: true,
+    },
 
-    authPopupPlugin(),
+    plugins: [
+      pgliteBootstrapPlugin(),
 
-    appEnvPlugin(),
+      authPopupPlugin(),
 
-    grokPwaPlugin(),
+      appEnvPlugin(),
 
-    tailwindcss(),
+      grokPwaPlugin(),
 
-    tanstackStart({
-      spa: {
-        enabled: true,
-      },
-    }),
+      tailwindcss(),
 
-    ...(command === "build" || isPreview
-      ? [
-          nitro({
-            preset: "vercel",
-            serverDir: "./server",
-          }),
-        ]
-      : []),
+      tanstackStart({
+        spa: {
+          enabled: isCapacitorBuild,
 
-    viteReact(),
-  ],
-}));
+          ...(isCapacitorBuild
+            ? {
+                prerender: {
+                  enabled: true,
+                  outputPath: "/index.html",
+                },
+              }
+            : {}),
+        },
+      }),
+
+      // Keep Nitro for the normal Vercel/web build.
+      // Do NOT use Nitro for the Capacitor static build.
+      ...(!isCapacitorBuild &&
+      (command === "build" || isPreview)
+        ? [
+            nitro({
+              preset: "vercel",
+              serverDir: "./server",
+            }),
+          ]
+        : []),
+
+      viteReact(),
+    ],
+  };
+});
