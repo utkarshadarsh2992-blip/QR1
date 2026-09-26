@@ -32,42 +32,49 @@ jobs:
       - name: Install Capacitor
         run: npm install --no-save @capacitor/core@8 @capacitor/cli@8 @capacitor/android@8
 
-      - - name: Build web app
-  run: npm run build:dev
+      - name: Prepare Capacitor web directory
+        run: |
+          rm -rf dist
+          mkdir -p dist
 
-- name: Verify build output
-  run: |
-    if [ ! -d "dist" ]; then
-      echo "Error: dist directory not found after build"
-      ls -la
-      exit 1
-    fi
-    ls -la dist/
+          cat > dist/index.html <<'EOF'
+          <!doctype html>
+          <html>
+            <head>
+              <meta charset="UTF-8">
+              <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0"
+              >
+              <title>QR1</title>
+            </head>
+            <body>
+              <div id="root"></div>
+            </body>
+          </html>
+          EOF
+
       - name: Initialize Capacitor
         run: npx cap init QR1 com.qr1.app --web-dir dist
+
+      - name: Configure Capacitor
+        run: |
+          cat > capacitor.config.json <<'EOF'
+          {
+            "appId": "com.qr1.app",
+            "appName": "QR1",
+            "webDir": "dist",
+            "server": {
+              "url": "https://qr-1-5sh1.vercel.app",
+              "androidScheme": "https"
+            }
+          }
+          EOF
 
       - name: Add Android platform
         run: npx cap add android
 
-      - name: Inspect build output
-        run: |
-          echo "===== ROOT ====="
-          ls -la
-
-          echo "===== DIRECTORIES ====="
-          find . -maxdepth 4 -type d \
-            \( -name "dist" -o -name ".output" -o -name ".vercel" \) \
-            -print
-
-          echo "===== INDEX.HTML FILES ====="
-          find . -maxdepth 6 -name "index.html" -print
-
-          echo "===== VERCEL OUTPUT ====="
-          if [ -d ".vercel/output" ]; then
-            find .vercel/output -maxdepth 4 -type f -print
-          fi
-
-      - name: Sync web app to Android
+      - name: Sync Capacitor
         run: npx cap sync android
 
       - name: Build Debug APK
