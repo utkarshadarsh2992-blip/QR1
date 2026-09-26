@@ -30,32 +30,36 @@ jobs:
         run: npm ci
 
       - name: Install Capacitor
-        run: npm install --no-save @capacitor/core@8 @capacitor/cli@8 @capacitor/android@8
+        run: |
+          npm install --no-save \
+            @capacitor/core@8 \
+            @capacitor/cli@8 \
+            @capacitor/android@8
 
-      - name: Prepare Capacitor web directory
+      - name: Build app for Capacitor
         run: |
           rm -rf dist
-          mkdir -p dist
+          CAPACITOR_BUILD=true npx vite build
 
-          cat > dist/index.html <<'EOF'
-          <!doctype html>
-          <html>
-            <head>
-              <meta charset="UTF-8">
-              <meta
-                name="viewport"
-                content="width=device-width, initial-scale=1.0"
-              >
-              <title>QR1</title>
-            </head>
-            <body>
-              <div id="root"></div>
-            </body>
-          </html>
-          EOF
+      - name: Inspect static build
+        run: |
+          echo "=== dist ==="
+          find dist -maxdepth 4 -type f | sort
+
+          echo ""
+          echo "=== client ==="
+          find dist/client -maxdepth 4 -type f | sort || true
+
+      - name: Verify Capacitor web assets
+        run: |
+          test -f dist/client/index.html
+
+          echo "Capacitor web assets found:"
+          ls -lah dist/client
 
       - name: Initialize Capacitor
-        run: npx cap init QR1 com.qr1.app --web-dir dist
+        run: |
+          npx cap init QR1 com.qr1.app --web-dir dist/client
 
       - name: Configure Capacitor
         run: |
@@ -63,10 +67,9 @@ jobs:
           {
             "appId": "com.qr1.app",
             "appName": "QR1",
-            "webDir": "dist",
-            "server": {
-              "url": "https://qr-1-5sh1.vercel.app",
-              "androidScheme": "https"
+            "webDir": "dist/client",
+            "android": {
+              "backgroundColor": "#000000"
             }
           }
           EOF
