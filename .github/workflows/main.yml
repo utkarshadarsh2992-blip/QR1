@@ -34,6 +34,8 @@ jobs:
 
       - name: Build web app
         run: npm run build:dev
+      - name: Initialize Capacitor
+        run: npx cap init QR1 com.qr1.app --web-dir dist
 
       - name: Add Android platform
         run: npx cap add android
