@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Lattice",
+      "hasCanvas": true,
+      "bodyTextLen": 506,
+      "bodyTextHash": "a805b70e4810c78fc491b19b469bd09aa56933e6d765a2e1f5b6211a000055b8",
+      "bodyTextPrefix": "QR STUDIO Lattice Type a URL or any text. The code updates as yo",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Lattice",
+      "hasCanvas": true,
+      "bodyTextLen": 506,
+      "bodyTextHash": "a805b70e4810c78fc491b19b469bd09aa56933e6d765a2e1f5b6211a000055b8",
+      "bodyTextPrefix": "QR STUDIO Lattice Type a URL or any text. The code updates as yo",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": false,
+  "baselineReasons": []
+}

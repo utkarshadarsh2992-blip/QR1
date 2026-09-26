@@ -1,0 +1,20 @@
+# Dependencies and build output
+node_modules/
+dist/
+build/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Platform-generated runtime metadata
+.grok/app-env.json
+.grok/preview.log
+.grok/status
+.project_id
+.vercel/
+
+# Local OS/editor files
+.DS_Store
+*.swp

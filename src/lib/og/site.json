@@ -1,0 +1,6 @@
+{
+  "title": "Lattice",
+  "type": "x:game",
+  "card": "custom",
+  "description": "Generate a QR code as you type. Choose colors, size, and error correction, then download a PNG."
+}
