@@ -41,6 +41,24 @@ jobs:
       - name: Add Android platform
         run: npx cap add android
 
+      - name: Inspect build output
+        run: |
+          echo "===== ROOT ====="
+          ls -la
+
+          echo "===== DIRECTORIES ====="
+          find . -maxdepth 4 -type d \
+            \( -name "dist" -o -name ".output" -o -name ".vercel" \) \
+            -print
+
+          echo "===== INDEX.HTML FILES ====="
+          find . -maxdepth 6 -name "index.html" -print
+
+          echo "===== VERCEL OUTPUT ====="
+          if [ -d ".vercel/output" ]; then
+            find .vercel/output -maxdepth 4 -type f -print
+          fi
+
       - name: Sync web app to Android
         run: npx cap sync android
 
