@@ -1,8 +1,0 @@
-{
-  "appId": "com.qr1.app",
-  "appName": "QR1",
-  "webDir": "dist",
-  "server": {
-    "androidScheme": "https"
-  }
-}
