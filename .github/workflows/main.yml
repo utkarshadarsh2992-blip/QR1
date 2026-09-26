@@ -32,9 +32,17 @@ jobs:
       - name: Install Capacitor
         run: npm install --no-save @capacitor/core@8 @capacitor/cli@8 @capacitor/android@8
 
-      - name: Build web app
-        run: npm run build:dev
+      - - name: Build web app
+  run: npm run build:dev
 
+- name: Verify build output
+  run: |
+    if [ ! -d "dist" ]; then
+      echo "Error: dist directory not found after build"
+      ls -la
+      exit 1
+    fi
+    ls -la dist/
       - name: Initialize Capacitor
         run: npx cap init QR1 com.qr1.app --web-dir dist
 
